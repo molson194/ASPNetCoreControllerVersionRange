@@ -39,15 +39,18 @@ namespace TestApiVersioning2
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v0", new OpenApiInfo { Title = "My API 0", Version = "v0" });
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API 1", Version = "v1" });
-                c.SwaggerDoc("v2", new OpenApiInfo { Title = "My API 2", Version = "v2" });
+                c.SwaggerDoc("2020-01-01-preview", new OpenApiInfo { Title = "My API 0", Version = "v0" });
+                c.SwaggerDoc("2020-01-01", new OpenApiInfo { Title = "My API 1", Version = "v1" });
+                c.SwaggerDoc("2021-01-01-preview", new OpenApiInfo { Title = "My API 2", Version = "v2" });
+                c.SwaggerDoc("2021-01-01", new OpenApiInfo { Title = "My API 3", Version = "v3" });
+                c.SwaggerDoc("2022-01-01-preview", new OpenApiInfo { Title = "My API 4", Version = "v4" });
                 c.DocInclusionPredicate((version, desc) =>
                 {
                     if (!desc.TryGetMethodInfo(out MethodInfo methodInfo)) return false;
                     // var versions = methodInfo.DeclaringType.GetCustomAttributes(true).OfType<StableApiRangeAttribute>().SelectMany(attr => attr.Versions); // Class Level Attributes
-                    var versions = methodInfo.GetCustomAttribute<StableApiRangeAttribute>().Versions;
-                    return versions.Any(v => $"v{v.MinorVersion}" == version);
+                    var versions = methodInfo.GetCustomAttribute<ApiRangeAttribute>().Versions;
+                    var a = versions[0].ToString();
+                    return versions.Any(v => v.ToString() == version);
                 });
             });
         }
@@ -75,7 +78,7 @@ namespace TestApiVersioning2
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("v1/swagger.json", "My API V1");
+                c.SwaggerEndpoint("2020-01-01/swagger.json", "My API V1");
             });
         }
     }

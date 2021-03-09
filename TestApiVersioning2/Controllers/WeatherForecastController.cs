@@ -24,7 +24,7 @@ namespace TestApiVersioning2.Controllers
         }
 
         [HttpGet]
-        [StableApiRange(0, 1)]
+        [ApiRange("2020-01-01-preview", "2021-01-01-preview")] // Changing 2nd Param to V20210303 will fail swagger gen
         public IEnumerable<WeatherForecast> Get0()
         {
             var rng = new Random();
@@ -38,7 +38,7 @@ namespace TestApiVersioning2.Controllers
         }
 
         [HttpGet]
-        [StableApiRange(2)]
+        [ApiRange("2021-01-01-preview")]
         public IEnumerable<WeatherForecast2> Get1()
         {
             var rng = new Random();
